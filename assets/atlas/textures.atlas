@@ -1,0 +1,48 @@
+
+textures.png
+size: 256, 256
+format: RGBA8888
+filter: Nearest, Nearest
+repeat: none
+background_tile
+  rotate: false
+  xy: 2, 102
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: -1
+grass_tile
+  rotate: false
+  xy: 2, 36
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+husband
+  rotate: false
+  xy: 2, 2
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+road_tile
+  rotate: false
+  xy: 132, 166
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+shovel
+  rotate: false
+  xy: 198, 198
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+snow_tile
+  rotate: false
+  xy: 68, 36
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
