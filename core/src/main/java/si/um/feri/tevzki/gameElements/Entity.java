@@ -11,11 +11,22 @@ public class Entity extends Actor {
     public TextureRegion region;
     public Rectangle rect = new Rectangle();
 
+    protected float hitboxOffsetX = 0;
+    protected float hitboxOffsetY = 0;
+    protected float hitboxWidth;
+    protected float hitboxHeight;
+
 
     @Override
     public void act(float delta) {
         super.act(delta);
-        rect.set(getX(), getY(), getWidth(), getHeight());
+
+        rect.set(
+            getX() + getParent().getX(),
+            getY() + getParent().getY(),
+            hitboxWidth > 0 ? hitboxWidth : getWidth(),
+            hitboxHeight > 0 ? hitboxHeight : getHeight()
+        );
     }
 
     @Override

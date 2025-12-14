@@ -1,12 +1,15 @@
 package si.um.feri.tevzki.screen;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -41,6 +44,11 @@ public class GameScreen extends ScreenAdapter {
     private Stage levelStage;
     private Player player;
     private TileGrid tileGrid;
+    private OrthographicCamera levelCamera;
+    private float zoom = 1f;
+    private static final float ZOOM_MIN = 0.5f;
+    private static final float ZOOM_MAX = 2.5f;
+    private static final boolean debug = false;
 
     public GameScreen(ShovelGame game) {
         this.game = game;
@@ -54,9 +62,10 @@ public class GameScreen extends ScreenAdapter {
         backgroundStage = new Stage(backgroundViewport, game.getBatch());
 
         // Game stage
-        levelViewport = new FitViewport(GameConfig.WORLD_WIDTH, GameConfig.WORLD_HEIGHT);
+        levelCamera = new OrthographicCamera();
+        levelViewport = new FitViewport(GameConfig.WORLD_WIDTH, GameConfig.WORLD_HEIGHT, levelCamera);
         levelStage = new Stage(levelViewport, game.getBatch());
-        levelStage.setDebugAll(true);
+        levelStage.setDebugAll(debug);
         // Asset manager
         assetManager.load(AssetDescriptors.GAME_ATLAS);
         assetManager.finishLoading();
@@ -67,18 +76,32 @@ public class GameScreen extends ScreenAdapter {
         backgroundStage.addActor(createBackground());
 
         // TileGrid
-        tileGrid = new TileGrid(3, 3, gameAtlas);
+        tileGrid = new TileGrid(50, 10, gameAtlas);
 
         // Add snow tiles from grid to stage
         for (Actor tile: tileGrid.grid) {
             levelStage.addActor(tile);
         }
 
-        player = new Player(gameAtlas.findRegion(RegionNames.HUSBAND), tileGrid.grid);
+        player = new Player(gameAtlas.findRegion(RegionNames.HUSBAND), tileGrid.grid, gameAtlas.findRegion(RegionNames.SHOVEL));
         levelStage.addActor(player);
+
+        setupInputHandlers();
     }
 
+    private void setupInputHandlers() {
+        Gdx.input.setInputProcessor(new InputAdapter() {
+            @Override
+            public boolean scrolled(float amountX, float amountY) {
+                zoom += amountY * 0.1f;   // scroll speed
+                zoom = MathUtils.clamp(zoom, ZOOM_MIN, ZOOM_MAX);
 
+                levelCamera.zoom = zoom;
+                levelCamera.update();
+                return true;
+            }
+        });
+    }
 
 
     @Override
