@@ -16,12 +16,15 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 
+import java.util.Iterator;
+
 import si.um.feri.tevzki.ShovelGame;
 import si.um.feri.tevzki.assets.AssetDescriptors;
 import si.um.feri.tevzki.assets.RegionNames;
 import si.um.feri.tevzki.config.GameConfig;
-import si.um.feri.tevzki.gameElements.Grid;
+import si.um.feri.tevzki.gameElements.TileGrid;
 import si.um.feri.tevzki.gameElements.Player;
+import si.um.feri.tevzki.gameElements.Tile;
 
 /** First screen of the application.
  * Loads Assets and prepares systems. Is the Screen that creates the engine
@@ -37,6 +40,7 @@ public class GameScreen extends ScreenAdapter {
     private Stage backgroundStage;
     private Stage levelStage;
     private Player player;
+    private TileGrid tileGrid;
 
     public GameScreen(ShovelGame game) {
         this.game = game;
@@ -62,17 +66,19 @@ public class GameScreen extends ScreenAdapter {
         // Background
         backgroundStage.addActor(createBackground());
 
-        // Grid
-        Grid levelGrid = new Grid(20, 10, gameAtlas);
+        // TileGrid
+        tileGrid = new TileGrid(3, 3, gameAtlas);
 
-        for (Actor tile: levelGrid.grid) {
+        // Add snow tiles from grid to stage
+        for (Actor tile: tileGrid.grid) {
             levelStage.addActor(tile);
         }
 
-        player = new Player(gameAtlas.findRegion(RegionNames.HUSBAND));
+        player = new Player(gameAtlas.findRegion(RegionNames.HUSBAND), tileGrid.grid);
         levelStage.addActor(player);
-
     }
+
+
 
 
     @Override

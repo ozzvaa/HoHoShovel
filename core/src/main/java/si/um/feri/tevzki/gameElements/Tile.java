@@ -1,17 +1,15 @@
 package si.um.feri.tevzki.gameElements;
 
-import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.math.Vector2;
 
 import si.um.feri.tevzki.assets.RegionNames;
 import si.um.feri.tevzki.config.GameConfig;
 
-public class Tile extends Actor {
+public class Tile extends Entity {
     public TileType type;
-    private TextureRegion region;
-
+    private Vector2 velocity = new Vector2(); // current movement velocity
+    private final float friction  = GameConfig.SNOW_FRICTION;
 
     /**
      * Tile Actor
@@ -38,19 +36,34 @@ public class Tile extends Actor {
     @Override
     public void act(float delta) {
         super.act(delta);
+
+        // Apply velocity
+        moveBy(velocity.x * delta, velocity.y * delta);
+
+        // Apply friction
+        velocity.scl(1 - friction * delta);
+
+        // Stop if very small
+        if (velocity.len2() < 0.001f) {
+            velocity.set(0,0);
+        }
     }
 
-    @Override
-    public void draw(Batch batch, float parentAlpha) {
-        batch.draw(
-            region,
-            getX(),
-            getY(),
-            getWidth(),
-            getHeight()
-        );
+    public void push(Vector2 playerCenter) {
+        // Only snow tiles can be pushed
+        if (type != TileType.SNOW) return;
+
+        // Tile center
+        float tileCenterX = getX() + getWidth() / 2f;
+        float tileCenterY = getY() + getHeight() / 2f;
+
+        Vector2 dir = new Vector2(tileCenterX - playerCenter.x, tileCenterY - playerCenter.y);
+
+        if (dir.len() == 0) return; // avoid zero vector
+        dir.nor(); // normalize
+
+        // Set velocity based on push strength
+        velocity.set(dir.scl(GameConfig.SNOW_PUSH_SPEED));
+
     }
-
-
-
 }
