@@ -4,12 +4,16 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -47,6 +51,7 @@ public class GameScreen extends ScreenAdapter {
     private static final float ZOOM_MIN = 0.5f;
     private static final float ZOOM_MAX = 2.5f;
     private static final boolean debug = false;
+    private Rectangle cameraRegion;
 
     public GameScreen(ShovelGame game) {
         this.game = game;
@@ -61,9 +66,11 @@ public class GameScreen extends ScreenAdapter {
 
         // Game stage
         levelCamera = new OrthographicCamera();
+        cameraRegion = new Rectangle(0,0,GameConfig.WORLD_WIDTH, GameConfig.WORLD_HEIGHT);
         levelViewport = new FitViewport(GameConfig.WORLD_WIDTH, GameConfig.WORLD_HEIGHT, levelCamera);
         levelStage = new Stage(levelViewport, game.getBatch());
         levelStage.setDebugAll(debug);
+
         // Asset manager
         assetManager.load(AssetDescriptors.GAME_ATLAS);
         assetManager.finishLoading();
@@ -112,9 +119,75 @@ public class GameScreen extends ScreenAdapter {
         backgroundStage.act(delta);
         backgroundStage.draw();
 
-        levelViewport.apply(true);
+        moveCamera();
+
         levelStage.act(delta);
         levelStage.draw();
+
+        if (debug) drawDebug(game.getShapeRenderer());
+    }
+
+    private void moveCamera() {
+        float viewportWorldWidth  = levelCamera.viewportWidth  * levelCamera.zoom;
+        float viewportWorldHeight = levelCamera.viewportHeight * levelCamera.zoom;
+
+        float halfW = viewportWorldWidth  / 2f;
+        float halfH = viewportWorldHeight / 2f;
+
+        float worldW = GameConfig.WORLD_WIDTH;
+        float worldH = GameConfig.WORLD_HEIGHT;
+
+        float targetX = player.getX() + player.getWidth()  / 2f;
+        float targetY = player.getY() + player.getHeight() / 2f;
+
+        // X axis
+        if (viewportWorldWidth >= worldW) {
+            levelCamera.position.x = worldW / 2f;
+        } else {
+            levelCamera.position.x = MathUtils.clamp(
+                targetX,
+                halfW,
+                worldW - halfW
+            );
+        }
+
+        // Y axis
+        if (viewportWorldHeight >= worldH) {
+            levelCamera.position.y = worldH / 2f;
+        } else {
+            levelCamera.position.y = MathUtils.clamp(
+                targetY,
+                halfH,
+                worldH - halfH
+            );
+        }
+
+        levelCamera.update();
+    }
+
+    private void drawDebug(ShapeRenderer shapeRenderer) {
+        // ===== LEVEL CAMERA (world space) =====
+        shapeRenderer.setProjectionMatrix(levelStage.getCamera().combined);
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+
+        shapeRenderer.setColor(Color.RED);
+        shapeRenderer.rect(
+            player.shovel.rect.x,
+            player.shovel.rect.y,
+            player.shovel.rect.width,
+            player.shovel.rect.height
+        );
+
+        shapeRenderer.setColor(Color.YELLOW);
+        shapeRenderer.rect(
+            cameraRegion.x,
+            cameraRegion.y,
+            cameraRegion.width,
+            cameraRegion.height
+        );
+        System.out.println(levelCamera.viewportHeight*levelCamera.zoom);
+
+        shapeRenderer.end();
 
     }
 

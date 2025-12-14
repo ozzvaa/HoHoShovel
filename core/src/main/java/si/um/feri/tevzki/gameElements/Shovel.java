@@ -23,7 +23,16 @@ public class Shovel extends Entity{
         hitboxHeight = GameConfig.SHOVEL_HEAD_HEIGHT;
 
         hitboxOffsetX = (GameConfig.SHOVEL_WIDTH -GameConfig.SHOVEL_HEAD_WIDTH)/2;
-        hitboxOffsetY = GameConfig.TILE_BIT_SIZE;
+        hitboxOffsetY = GameConfig.TILE_BIT_SIZE/2;
+
+    }
+
+    public void moveTo(float targetX, float targetY) {
+        float lerpFactor = 0.2f; // adjust for speed, 1 = instant, 0.1 = slow
+        setPosition(
+            getX() + (targetX - getX()) * lerpFactor,
+            getY() + (targetY - getY()) * lerpFactor
+        );
 
     }
 

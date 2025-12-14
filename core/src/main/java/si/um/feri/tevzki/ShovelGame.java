@@ -3,6 +3,7 @@ package si.um.feri.tevzki;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 import si.um.feri.tevzki.screen.GameScreen;
 
@@ -12,6 +13,7 @@ import si.um.feri.tevzki.screen.GameScreen;
 public class ShovelGame extends Game {
     private AssetManager assetManager;
     private SpriteBatch batch;
+    private ShapeRenderer shapeRenderer;
 
     @Override
     public void create() {
@@ -20,6 +22,7 @@ public class ShovelGame extends Game {
 
         // Drawing
         batch = new SpriteBatch();
+        shapeRenderer = new ShapeRenderer();
 
         setScreen(new GameScreen(this));
     }
@@ -36,5 +39,9 @@ public class ShovelGame extends Game {
 
     public SpriteBatch getBatch() {
         return batch;
+    }
+
+    public ShapeRenderer getShapeRenderer() {
+        return shapeRenderer;
     }
 }

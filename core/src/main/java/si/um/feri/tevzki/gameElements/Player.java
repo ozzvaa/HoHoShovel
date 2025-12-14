@@ -14,7 +14,7 @@ import si.um.feri.tevzki.config.GameConfig;
 
 public class Player extends Group {
     private Entity body;
-    private Shovel shovel;
+    public Shovel shovel;
     private Array<SnowTile> tileGrid;
 
 
@@ -96,32 +96,34 @@ public class Player extends Group {
         // 3️⃣ Move in the last pressed direction (top of stack)
         if (dirStack.size > 0) {
             Direction dir = dirStack.peek(); // last added
+
+
             switch (dir) {
                 case LEFT:
                     dx = -speed;
                     body.region = leftRegion;
-                    shovel.setPosition(-shovel.getWidth(), 0);
+                    shovel.moveTo(-shovel.getWidth(), 0);
                     shovel.setZIndex(1);
                     shovel.region = shovelLeftRegion;
                     break;
                 case RIGHT:
                     dx = speed;
                     body.region = rightRegion;
-                    shovel.setPosition(getWidth(), 0);
+                    shovel.moveTo(getWidth(), 0);
                     shovel.setZIndex(1);
                     shovel.region = shovelRightRegion;
                     break;
                 case UP:
                     dy = speed;
                     body.region = upRegion;
-                    shovel.setPosition(getWidth()/2-shovel.getWidth()/2, 0);
+                    shovel.moveTo(getWidth()/2-shovel.getWidth()/2, 0);
                     shovel.setZIndex(0);
                     shovel.region = shovelUpRegion;
                     break;
                 case DOWN:
                     dy = -speed;
                     body.region = downRegion;
-                    shovel.setPosition(getWidth()/2-shovel.getWidth()/2, 0);
+                    shovel.moveTo(getWidth()/2-shovel.getWidth()/2, 0);
                     shovel.setZIndex(1);
                     shovel.region = shovelDownRegion;
                     break;
@@ -155,6 +157,7 @@ public class Player extends Group {
             }
         }
     }
+
 
 
 }
