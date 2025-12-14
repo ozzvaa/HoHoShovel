@@ -6,7 +6,7 @@ import com.badlogic.gdx.utils.Array;
 import si.um.feri.tevzki.config.GameConfig;
 
 public class TileGrid {
-    public Array<Tile> grid = new Array<>();
+    public Array<SnowTile> grid = new Array<>();
     public float GRID_WIDTH;
     public float GRID_HEIGHT;
 
@@ -14,10 +14,12 @@ public class TileGrid {
     public TileGrid(int width, int height, TextureAtlas gameAtlas) {
         GRID_WIDTH = width*GameConfig.TILE_SIZE;
         GRID_HEIGHT = height*GameConfig.TILE_SIZE;
-        for (int y = 0; y < height; y++) {
+        for (int y = 0; y < height; y++) { // X and Y inside of SnowTile Are world coordinates
             for (int x = 0; x < width; x++) {
-                Tile tile = new Tile(TileType.SNOW, gameAtlas, x+GameConfig.WORLD_WIDTH/2f-GRID_WIDTH/2f, y+GameConfig.WORLD_HEIGHT/2f-GRID_HEIGHT/2f);
-                grid.add(tile);
+                float tileX = x+GameConfig.WORLD_WIDTH/2f-GRID_WIDTH/2f;
+                float tileY = y+GameConfig.WORLD_HEIGHT/2f-GRID_HEIGHT/2f;
+                SnowTile snowTile = new SnowTile(TileType.SNOW, gameAtlas, tileX, tileY); // LARGE TILES
+                grid.add(snowTile);
             }
         }
     }

@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.TiledDrawable;
@@ -19,15 +20,12 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 
-import java.util.Iterator;
-
 import si.um.feri.tevzki.ShovelGame;
 import si.um.feri.tevzki.assets.AssetDescriptors;
 import si.um.feri.tevzki.assets.RegionNames;
 import si.um.feri.tevzki.config.GameConfig;
 import si.um.feri.tevzki.gameElements.TileGrid;
 import si.um.feri.tevzki.gameElements.Player;
-import si.um.feri.tevzki.gameElements.Tile;
 
 /** First screen of the application.
  * Loads Assets and prepares systems. Is the Screen that creates the engine
@@ -76,10 +74,10 @@ public class GameScreen extends ScreenAdapter {
         backgroundStage.addActor(createBackground());
 
         // TileGrid
-        tileGrid = new TileGrid(50, 10, gameAtlas);
+        tileGrid = new TileGrid(GameConfig.GRID_WIDTH, GameConfig.GRID_HEIGHT, gameAtlas);
 
         // Add snow tiles from grid to stage
-        for (Actor tile: tileGrid.grid) {
+        for (Group tile: tileGrid.grid) {
             levelStage.addActor(tile);
         }
 

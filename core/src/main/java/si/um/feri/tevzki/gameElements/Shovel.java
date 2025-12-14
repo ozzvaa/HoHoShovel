@@ -1,6 +1,9 @@
 package si.um.feri.tevzki.gameElements;
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.Group;
+
+import java.security.cert.TrustAnchor;
 
 import si.um.feri.tevzki.config.GameConfig;
 
@@ -14,14 +17,15 @@ public class Shovel extends Entity{
         setSize(GameConfig.SHOVEL_WIDTH, GameConfig.SHOVEL_HEIGHT);
 
         // CENTER the shovel on the player
+        // position relative to player
         setPosition(GameConfig.PLAYER_WIDTH/2f-GameConfig.SHOVEL_WIDTH/2f,0);
 
         // 🔲 HITBOX ONLY AT THE BOTTOM
-        hitboxWidth = GameConfig.SHOVEL_WIDTH;
-        hitboxHeight = GameConfig.SHOVEL_HEIGHT * 0.25f;
+        hitboxWidth = GameConfig.SHOVEL_HEAD_WIDTH;
+        hitboxHeight = GameConfig.SHOVEL_HEAD_HEIGHT;
 
-        hitboxOffsetX = 0;
-        hitboxOffsetY = 0;
+        hitboxOffsetX = (GameConfig.SHOVEL_WIDTH -GameConfig.SHOVEL_HEAD_WIDTH)/2;
+        hitboxOffsetY = GameConfig.TILE_BIT_SIZE;
 
     }
 

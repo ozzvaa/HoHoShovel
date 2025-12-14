@@ -3,7 +3,6 @@ package si.um.feri.tevzki.gameElements;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.utils.Array;
 
@@ -14,14 +13,14 @@ import si.um.feri.tevzki.config.GameConfig;
 public class Player extends Group {
     private Entity body;
     private Shovel shovel;
-    private Array<Tile> tileGrid;
+    private Array<SnowTile> tileGrid;
 
 
     private Array<Direction> dirStack = new Array<Direction>();
     private static final int STACK_SIZE = 4;
 
 
-    public Player(TextureRegion region, Array<Tile> tileGrid, TextureRegion shovelRegion) {
+    public Player(TextureRegion region, Array<SnowTile> tileGrid, TextureRegion shovelRegion) {
         body = new Entity();
         body.region = region;
 
@@ -33,12 +32,12 @@ public class Player extends Group {
         // Center origin
         body.setOrigin(getWidth() / 2f, getHeight() / 2f);
 
-        shovel = new Shovel(shovelRegion);
 
 
         setPosition(GameConfig.WORLD_WIDTH/2f-getWidth()/2f, GameConfig.WORLD_HEIGHT/2f-getHeight()/2f);
 
         addActor(body);
+        shovel = new Shovel(shovelRegion);
         addActor(shovel);
         this.tileGrid = tileGrid;
 
@@ -48,18 +47,13 @@ public class Player extends Group {
     public void act(float delta) {
         super.act(delta);
 
+        handleMovement(delta);
 
 
-
-        Vector2 movement =  handleMovement(delta);
-        float dx = movement.x;
-        float dy = movement.y;
-
-        moveBy(dx, dy);
-        handleCollision(dx, dy);
+        handleCollision();
     }
 
-    private Vector2 handleMovement(float delta) {
+    private void handleMovement(float delta) {
         float dx = 0;
         float dy = 0;
         float speed = GameConfig.PLAYER_SPEED * delta;
@@ -87,7 +81,7 @@ public class Player extends Group {
             }
         }
 
-        return new Vector2(dx, dy);
+        moveBy(dx, dy);
     }
 
     private void pushDirection(Direction dir) {
@@ -104,14 +98,13 @@ public class Player extends Group {
         dirStack.removeValue(dir, true);
     }
 
-    private void handleCollision(float dx, float dy) { // Check for collision with tiles
-        Iterator<Tile> iter = tileGrid.iterator(); // tileGrid is your Array<Tile>
+    private void handleCollision() { // Check for collision with tiles
+        Iterator<SnowTile> iter = tileGrid.iterator(); // tileGrid is your Array<SnowTile>
 
         while (iter.hasNext()) {
-            Tile tile = iter.next();
-            if (shovel.collidesWith(tile)) {
-                tile.remove();
-                iter.remove();
+            SnowTile snowTile = iter.next();
+            if (shovel.collidesWith(snowTile.baseTile)) {
+                snowTile.shovelTile(shovel);
             }
         }
     }

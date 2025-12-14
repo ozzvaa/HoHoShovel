@@ -9,7 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 
 public class Entity extends Actor {
     public TextureRegion region;
-    public Rectangle rect = new Rectangle();
+    public Rectangle rect = new Rectangle(); // Rectangle coordinates should be in World units
 
     protected float hitboxOffsetX = 0;
     protected float hitboxOffsetY = 0;
@@ -21,13 +21,21 @@ public class Entity extends Actor {
     public void act(float delta) {
         super.act(delta);
 
-        rect.set(
-            getX() + getParent().getX(),
-            getY() + getParent().getY(),
+        Vector2 worldPos = new Vector2(getX(), getY());
+
+        if (getParent() != null) {
+            // Convert local position to stage/world coordinates
+            worldPos = localToStageCoordinates(new Vector2(0, 0));
+        }
+
+        rect.set( // Rect is always is World coordinates
+            worldPos.x + hitboxOffsetX,
+            worldPos.y + hitboxOffsetY,
             hitboxWidth > 0 ? hitboxWidth : getWidth(),
             hitboxHeight > 0 ? hitboxHeight : getHeight()
         );
     }
+
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
@@ -40,8 +48,8 @@ public class Entity extends Actor {
         );
     }
 
-    public boolean collidesWith(Entity entity) {
-        return rect.overlaps(entity.rect);
+    public boolean collidesWith(Entity other) {
+        return rect.overlaps(other.rect);
     }
 
     public float getCenterX() {
