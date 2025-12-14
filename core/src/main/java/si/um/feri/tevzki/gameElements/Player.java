@@ -2,12 +2,14 @@ package si.um.feri.tevzki.gameElements;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.utils.Array;
 
 import java.util.Iterator;
 
+import si.um.feri.tevzki.assets.RegionNames;
 import si.um.feri.tevzki.config.GameConfig;
 
 public class Player extends Group {
@@ -19,12 +21,33 @@ public class Player extends Group {
     private Array<Direction> dirStack = new Array<Direction>();
     private static final int STACK_SIZE = 4;
 
+    private static TextureRegion downRegion;
+    private static TextureRegion upRegion;
+    private static TextureRegion leftRegion;
+    private static TextureRegion rightRegion;
 
-    public Player(TextureRegion region, Array<SnowTile> tileGrid, TextureRegion shovelRegion) {
+    private static TextureRegion shovelDownRegion;
+    private static TextureRegion shovelUpRegion;
+    private static TextureRegion shovelLeftRegion;
+    private static TextureRegion shovelRightRegion;
+
+
+    public Player(TextureAtlas atlas, Array<SnowTile> tileGrid, TextureRegion shovelRegion) {
         body = new Entity();
-        body.region = region;
 
-        float aspectRatio =(float) region.getRegionWidth() / region.getRegionHeight();
+        downRegion  = atlas.findRegion(RegionNames.HUSBAND_DOWN);
+        leftRegion  = atlas.findRegion(RegionNames.HUSBAND_LEFT);
+        rightRegion = atlas.findRegion(RegionNames.HUSBAND_RIGHT);
+        upRegion = atlas.findRegion(RegionNames.HUSBAND_TOP);
+
+        shovelDownRegion  = atlas.findRegion(RegionNames.SHOVEL);
+        shovelLeftRegion  = atlas.findRegion(RegionNames.SHOVEL_LEFT);
+        shovelRightRegion = atlas.findRegion(RegionNames.SHOVEL_RIGHT);
+        shovelUpRegion = atlas.findRegion(RegionNames.SHOVEL);
+
+        body.region = downRegion;
+
+        float aspectRatio =(float) body.region.getRegionWidth() / body.region.getRegionHeight();
         GameConfig.PLAYER_WIDTH = GameConfig.PLAYER_HEIGHT*aspectRatio;
 
         body.setSize(GameConfig.PLAYER_WIDTH, GameConfig.PLAYER_HEIGHT);
@@ -33,12 +56,14 @@ public class Player extends Group {
         body.setOrigin(getWidth() / 2f, getHeight() / 2f);
 
 
-
         setPosition(GameConfig.WORLD_WIDTH/2f-getWidth()/2f, GameConfig.WORLD_HEIGHT/2f-getHeight()/2f);
+        setSize(GameConfig.PLAYER_WIDTH, GameConfig.PLAYER_HEIGHT);
 
         addActor(body);
+
         shovel = new Shovel(shovelRegion);
         addActor(shovel);
+
         this.tileGrid = tileGrid;
 
     }
@@ -48,8 +73,6 @@ public class Player extends Group {
         super.act(delta);
 
         handleMovement(delta);
-
-
         handleCollision();
     }
 
@@ -74,10 +97,34 @@ public class Player extends Group {
         if (dirStack.size > 0) {
             Direction dir = dirStack.peek(); // last added
             switch (dir) {
-                case LEFT: dx = -speed; break;
-                case RIGHT: dx = speed; break;
-                case UP: dy = speed; break;
-                case DOWN: dy = -speed; break;
+                case LEFT:
+                    dx = -speed;
+                    body.region = leftRegion;
+                    shovel.setPosition(-shovel.getWidth(), 0);
+                    shovel.setZIndex(1);
+                    shovel.region = shovelLeftRegion;
+                    break;
+                case RIGHT:
+                    dx = speed;
+                    body.region = rightRegion;
+                    shovel.setPosition(getWidth(), 0);
+                    shovel.setZIndex(1);
+                    shovel.region = shovelRightRegion;
+                    break;
+                case UP:
+                    dy = speed;
+                    body.region = upRegion;
+                    shovel.setPosition(getWidth()/2-shovel.getWidth()/2, 0);
+                    shovel.setZIndex(0);
+                    shovel.region = shovelUpRegion;
+                    break;
+                case DOWN:
+                    dy = -speed;
+                    body.region = downRegion;
+                    shovel.setPosition(getWidth()/2-shovel.getWidth()/2, 0);
+                    shovel.setZIndex(1);
+                    shovel.region = shovelDownRegion;
+                    break;
             }
         }
 

@@ -81,7 +81,7 @@ public class GameScreen extends ScreenAdapter {
             levelStage.addActor(tile);
         }
 
-        player = new Player(gameAtlas.findRegion(RegionNames.HUSBAND), tileGrid.grid, gameAtlas.findRegion(RegionNames.SHOVEL));
+        player = new Player(gameAtlas, tileGrid.grid, gameAtlas.findRegion(RegionNames.SHOVEL));
         levelStage.addActor(player);
 
         setupInputHandlers();
