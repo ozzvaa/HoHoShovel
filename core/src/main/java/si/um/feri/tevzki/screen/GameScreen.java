@@ -13,8 +13,8 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.TiledDrawable;
@@ -27,8 +27,10 @@ import si.um.feri.tevzki.ShovelGame;
 import si.um.feri.tevzki.assets.AssetDescriptors;
 import si.um.feri.tevzki.assets.RegionNames;
 import si.um.feri.tevzki.config.GameConfig;
+import si.um.feri.tevzki.gameElements.Tile;
 import si.um.feri.tevzki.gameElements.TileGrid;
 import si.um.feri.tevzki.gameElements.Player;
+import si.um.feri.tevzki.gameElements.TileType;
 
 /** First screen of the application.
  * Loads Assets and prepares systems. Is the Screen that creates the engine
@@ -77,19 +79,23 @@ public class GameScreen extends ScreenAdapter {
         gameAtlas = assetManager.get(AssetDescriptors.GAME_ATLAS);
 
         // Background
-        backgroundStage.addActor(createBackground());
+        backgroundStage.addActor(createScreenBackground());
+        levelStage.addActor(createLevelBackground());
 
         // TileGrid
-        tileGrid = new TileGrid(GameConfig.GRID_WIDTH, GameConfig.GRID_HEIGHT, gameAtlas);
+        tileGrid = new TileGrid((int) GameConfig.WORLD_WIDTH, (int) GameConfig.WORLD_HEIGHT, gameAtlas);
 
         // Add snow tiles from grid to stage
-        for (Group tile: tileGrid.grid) {
-            levelStage.addActor(tile);
+        for (int y = 0; y < tileGrid.height; y++) {
+            for (int x = 0; x < tileGrid.width; x++) {
+                Tile tile = tileGrid.grid[y][x];
+                levelStage.addActor(tile);
+            }
         }
+        tileGrid.setTiles(TileType.SNOW, 17, 9, 12, 13);
 
-        player = new Player(gameAtlas, tileGrid.grid, gameAtlas.findRegion(RegionNames.SHOVEL));
+        player = new Player(gameAtlas, tileGrid, gameAtlas.findRegion(RegionNames.SHOVEL));
         levelStage.addActor(player);
-
         setupInputHandlers();
     }
 
@@ -104,6 +110,22 @@ public class GameScreen extends ScreenAdapter {
                 levelCamera.update();
                 return true;
             }
+
+            @Override
+            public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+
+                // Convert screen → world coordinates
+                Vector3 worldCoords = new Vector3(screenX, screenY, 0);
+                levelCamera.unproject(worldCoords);
+
+                System.out.println(
+                    "World coords: x=" + worldCoords.x + ", y=" + worldCoords.y
+                );
+
+                return true;
+            }
+
+
         });
     }
 
@@ -184,7 +206,6 @@ public class GameScreen extends ScreenAdapter {
             worldBorder.width,
             worldBorder.height
         );
-        System.out.println(levelCamera.viewportHeight*levelCamera.zoom);
 
         shapeRenderer.end();
 
@@ -227,7 +248,7 @@ public class GameScreen extends ScreenAdapter {
     /**
      * Create a repeating background pattern Actor
      * */
-    private Actor createBackground() {
+    private Actor createScreenBackground() {
         TextureRegion region = gameAtlas.findRegion(RegionNames.BACKGROUND_TILE);
 
         Texture bgTexture = region.getTexture();
@@ -236,6 +257,15 @@ public class GameScreen extends ScreenAdapter {
         TiledDrawable tiledBg = new TiledDrawable(region);
 
         Image background = new Image(tiledBg);
+        background.setFillParent(true); // fills the whole stage
+
+        return background;
+    }
+
+    private Actor createLevelBackground() {
+        TextureRegion region = gameAtlas.findRegion(RegionNames.BACKGROUND);
+
+        Image background = new Image(region);
         background.setFillParent(true); // fills the whole stage
 
         return background;

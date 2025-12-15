@@ -39,6 +39,10 @@ public class Entity extends Actor {
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
+
+        if (region == null) {
+            return;
+        }
         batch.draw(
             region,
             getX(),

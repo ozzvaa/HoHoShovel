@@ -15,7 +15,7 @@ import si.um.feri.tevzki.config.GameConfig;
 public class Player extends Group {
     private Entity body;
     public Shovel shovel;
-    private Array<SnowTile> tileGrid;
+    private TileGrid grid;
 
 
     private Array<Direction> dirStack = new Array<Direction>();
@@ -33,7 +33,7 @@ public class Player extends Group {
     private Array<Snowball> snowballs;
 
 
-    public Player(TextureAtlas atlas, Array<SnowTile> tileGrid, TextureRegion shovelRegion) {
+    public Player(TextureAtlas atlas, TileGrid tileGrid, TextureRegion shovelRegion) {
         body = new Entity();
 
         downRegion  = atlas.findRegion(RegionNames.HUSBAND_DOWN);
@@ -65,7 +65,7 @@ public class Player extends Group {
         shovel = new Shovel(shovelRegion);
         addActor(shovel);
 
-        this.tileGrid = tileGrid;
+        this.grid = tileGrid;
 
     }
 
@@ -160,15 +160,6 @@ public class Player extends Group {
     }
 
     private void handleCollision() { // Check for collision with tiles
-        Iterator<SnowTile> iter = tileGrid.iterator(); // tileGrid is your Array<SnowTile>
-
-        while (iter.hasNext()) {
-            SnowTile snowTile = iter.next();
-            if (shovel.collidesWith(snowTile.baseTile)) {
-                int snowballCount = snowTile.shovelTile(shovel);
-                stackSnowballs(snowballCount);
-            }
-        }
     }
 
     private void stackSnowballs(int snowballCount) {

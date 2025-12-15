@@ -13,6 +13,8 @@ public class RegionNames {
     public static final String ROAD_TILE = "road_tile";
     public static final String GRASS_TILE = "grass_tile";
 
+    public static final String BACKGROUND = "hisa_background";
+
     private RegionNames() {
     }
 }

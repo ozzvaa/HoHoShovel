@@ -23,7 +23,7 @@ public class Shovel extends Entity{
         hitboxHeight = GameConfig.SHOVEL_HEAD_HEIGHT;
 
         hitboxOffsetX = (GameConfig.SHOVEL_WIDTH -GameConfig.SHOVEL_HEAD_WIDTH)/2;
-        hitboxOffsetY = GameConfig.TILE_BIT_SIZE/2;
+        hitboxOffsetY = 0;
 
     }
 
