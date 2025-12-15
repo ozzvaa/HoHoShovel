@@ -1,5 +1,6 @@
 package si.um.feri.tevzki.gameElements;
 
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.utils.Array;
@@ -12,6 +13,7 @@ import si.um.feri.tevzki.config.GameConfig;
 public class Tile extends Entity {
     public TileType type;
     private TextureAtlas gameAtlas;
+    public SnowPile pile;
     /**
      * Tile Actor
      *
@@ -22,7 +24,7 @@ public class Tile extends Entity {
     public Tile(TileType tileType, TextureAtlas gameAtlas, float worldX, float worldY) {
         this.type = tileType;
         this.gameAtlas = gameAtlas;
-
+        this.pile = null;
         setSize(GameConfig.TILE_SIZE, GameConfig.TILE_SIZE);
         setPosition(worldX, worldY); // Position of Tile - is in World Coordinates
     }
@@ -35,6 +37,8 @@ public class Tile extends Entity {
             region = gameAtlas.findRegion(RegionNames.ROAD_TILE);
         } else if (type == TileType.GRASS) {
             region = gameAtlas.findRegion(RegionNames.GRASS_TILE);
+        } else if (type == TileType.ICE) {
+            region = gameAtlas.findRegion(RegionNames.ICE_TILE);
         } else {
             region = null;
         }
@@ -44,6 +48,11 @@ public class Tile extends Entity {
         setType(TileType.fromId(typeId));
     }
 
-
-
+    @Override
+    public void draw(Batch batch, float parentAlpha) {
+        super.draw(batch, parentAlpha);
+        if (pile != null) {
+            pile.draw(batch, parentAlpha);
+        }
+    }
 }

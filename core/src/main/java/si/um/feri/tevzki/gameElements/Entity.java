@@ -53,6 +53,9 @@ public class Entity extends Actor {
     }
 
     public boolean collidesWith(Entity other) {
+        if (other == null) {
+            return false;
+        }
         return rect.overlaps(other.rect);
     }
 

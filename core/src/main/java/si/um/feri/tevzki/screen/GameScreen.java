@@ -50,7 +50,7 @@ public class GameScreen extends ScreenAdapter {
     private OrthographicCamera levelCamera;
     private float zoom = 1f;
     private static final float ZOOM_MIN = 0.5f;
-    private static final float ZOOM_MAX = 2.5f;
+    private static final float ZOOM_MAX = 1f;
     private static final boolean debug = GameConfig.DEBUG;
     private Rectangle worldBorder;
     private Level level;
@@ -85,7 +85,7 @@ public class GameScreen extends ScreenAdapter {
         levelStage.addActor(createLevelBackground());
 
         // TileGrid
-        tileGrid = new TileGrid((int) GameConfig.WORLD_WIDTH, (int) GameConfig.WORLD_HEIGHT, gameAtlas);
+        tileGrid = new TileGrid((int) GameConfig.WORLD_WIDTH, (int) GameConfig.WORLD_HEIGHT, gameAtlas, levelStage);
 
         // Add snow tiles from grid to stage
         for (int y = 0; y < tileGrid.height; y++) {
@@ -97,10 +97,10 @@ public class GameScreen extends ScreenAdapter {
 
         // Setup playable area
         level = Level.level1(gameAtlas);
-//        level = new Level(10,10,4,4,gameAtlas);
+//        level = new Level(4,4,4,4,gameAtlas);
         tileGrid.setLevel(level);
 
-        player = new Player(gameAtlas, tileGrid, level, gameAtlas.findRegion(RegionNames.SHOVEL));
+        player = new Player(gameAtlas, tileGrid, level);
         levelStage.addActor(player);
         setupInputHandlers();
     }

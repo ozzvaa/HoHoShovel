@@ -28,21 +28,26 @@ public class Player extends Group {
     private Array<Direction> dirStack = new Array<Direction>();
     private Array<Snowball> snowballs;
     private Level level;
+    private int accumulatedSnowTotal = 0;
+    private int accumulatedSnow = 0;
+    private int strength;
+    private boolean spacePressed;
 
 
-    public Player(TextureAtlas atlas, TileGrid tileGrid, Level level, TextureRegion shovelRegion) {
+    public Player(TextureAtlas gameAtlas, TileGrid tileGrid, Level level) {
         this.level = level;
+        strength = GameConfig.PLAYER_STRENGTH;
         body = new Entity();
 
-        downRegion = atlas.findRegion(RegionNames.HUSBAND_DOWN);
-        leftRegion = atlas.findRegion(RegionNames.HUSBAND_LEFT);
-        rightRegion = atlas.findRegion(RegionNames.HUSBAND_RIGHT);
-        upRegion = atlas.findRegion(RegionNames.HUSBAND_TOP);
+        downRegion = gameAtlas.findRegion(RegionNames.HUSBAND_DOWN);
+        leftRegion = gameAtlas.findRegion(RegionNames.HUSBAND_LEFT);
+        rightRegion = gameAtlas.findRegion(RegionNames.HUSBAND_RIGHT);
+        upRegion = gameAtlas.findRegion(RegionNames.HUSBAND_TOP);
 
-        shovelDownRegion = atlas.findRegion(RegionNames.SHOVEL);
-        shovelLeftRegion = atlas.findRegion(RegionNames.SHOVEL_LEFT);
-        shovelRightRegion = atlas.findRegion(RegionNames.SHOVEL_RIGHT);
-        shovelUpRegion = atlas.findRegion(RegionNames.SHOVEL);
+        shovelDownRegion = gameAtlas.findRegion(RegionNames.SHOVEL);
+        shovelLeftRegion = gameAtlas.findRegion(RegionNames.SHOVEL_LEFT);
+        shovelRightRegion = gameAtlas.findRegion(RegionNames.SHOVEL_RIGHT);
+        shovelUpRegion = gameAtlas.findRegion(RegionNames.SHOVEL);
 
         body.region = downRegion;
 
@@ -59,7 +64,7 @@ public class Player extends Group {
 
         addActor(body);
 
-        shovel = new Shovel(shovelRegion);
+        shovel = new Shovel(shovelDownRegion, gameAtlas.findRegion(RegionNames.SNOW_PILE));
         addActor(shovel);
 
         this.grid = tileGrid;
@@ -71,7 +76,12 @@ public class Player extends Group {
         super.act(delta);
 
         handleMovement(delta);
+        handleInput();
         handleCollision();
+    }
+
+    private void handleInput() {
+        spacePressed = (Gdx.input.isKeyJustPressed(Input.Keys.SPACE));
     }
 
     private void handleMovement(float delta) {
@@ -114,7 +124,7 @@ public class Player extends Group {
                 case UP:
                     dy = speed;
                     body.region = upRegion;
-                    shovel.moveTo(getWidth() / 2 - shovel.getWidth() / 2, 0);
+                    shovel.moveTo(getWidth() / 2 - shovel.getWidth() / 2, 0.1f);
                     shovel.setZIndex(0);
                     shovel.region = shovelUpRegion;
                     break;
@@ -158,10 +168,23 @@ public class Player extends Group {
 
     private void handleCollision() { // Check for collision with tiles
         Vector2 shovelCenter = getShovelCenter();
-        Tile nearTiles[] = grid.getCloseTiles(shovelCenter.x, shovelCenter.y);
-        for (Tile tile: nearTiles) {
+        Tile[] nearTiles = grid.getCloseTiles(shovelCenter.x, shovelCenter.y);
+
+        for (Tile tile : nearTiles) {
             if (shovel.collidesWith(tile)) {
-                shovel.shovelTile(tile);
+                if (accumulatedSnow < strength && tile.type == TileType.SNOW) {
+                    shovel.shovelTile(tile);
+                    accumulatedSnowTotal++;
+                    accumulatedSnow++;
+                    shovel.pile.setHeight(GameConfig.PILE_SIZE*accumulatedSnow/strength);
+                }
+
+                if (spacePressed && tile.type == TileType.ICE && tile.pile == null && accumulatedSnow > 0) {
+                    grid.addSnowPile(tile);
+                    accumulatedSnow = 0;
+                    shovel.pile.setHeight(0);
+
+                }
             }
         }
     }

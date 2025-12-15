@@ -1,21 +1,27 @@
 package si.um.feri.tevzki.gameElements;
 
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.utils.Array;
 
+import si.um.feri.tevzki.assets.RegionNames;
 import si.um.feri.tevzki.config.GameConfig;
 
 public class TileGrid {
     public Tile[][] grid;
     public int width;
     public int height;
-
+    private TextureAtlas gameAtlas;
+    private final Stage stage;
 
     /** Creates a grid of tile Actors */
-    public TileGrid(int width, int height, TextureAtlas gameAtlas) {
+    public TileGrid(int width, int height, TextureAtlas gameAtlas, Stage stage) {
         this.width = width;
         this.height = height;
+        this.gameAtlas = gameAtlas;
+        this.stage = stage;
         grid = new Tile[height][width];
-
 
         for (int y = 0; y < height; y++) { // X and Y inside of Tile Are world coordinates
             for (int x = 0; x < width; x++) {
@@ -85,5 +91,16 @@ public class TileGrid {
     }
     public Tile getTile(float x, float y) {
         return grid[(int)y][(int)x];
+    }
+
+    public boolean addSnowPile(Tile targetTile) {
+        if (targetTile.pile != null) {
+            return false;
+        }
+
+        TextureRegion region = gameAtlas.findRegion(RegionNames.SNOW_PILE);
+        SnowPile pile = new SnowPile(region, targetTile.getX(), targetTile.getY());
+        targetTile.pile = pile;
+        return true;
     }
 }

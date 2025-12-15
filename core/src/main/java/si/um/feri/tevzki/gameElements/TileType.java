@@ -5,7 +5,8 @@ public enum TileType {
     NONE(0),
     SNOW(1),
     ROAD(2),
-    GRASS(3);
+    GRASS(3),
+    ICE(4);
 
     private final int id;
 
