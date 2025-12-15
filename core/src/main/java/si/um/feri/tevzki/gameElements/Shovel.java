@@ -1,6 +1,7 @@
 package si.um.feri.tevzki.gameElements;
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Vector2;
 
 
 import si.um.feri.tevzki.config.GameConfig;
@@ -34,6 +35,10 @@ public class Shovel extends Entity{
             getY() + (targetY - getY()) * lerpFactor
         );
 
+    }
+
+    public void shovelTile(Tile tile) {
+        tile.setType(TileType.NONE);
     }
 
 

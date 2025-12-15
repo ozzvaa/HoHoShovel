@@ -97,8 +97,8 @@ public class GameScreen extends ScreenAdapter {
 
         // Setup playable area
         level = Level.level1(gameAtlas);
+//        level = new Level(10,10,4,4,gameAtlas);
         tileGrid.setLevel(level);
-//        tileGrid.setTiles(TileType.SNOW, level1);
 
         player = new Player(gameAtlas, tileGrid, level, gameAtlas.findRegion(RegionNames.SHOVEL));
         levelStage.addActor(player);

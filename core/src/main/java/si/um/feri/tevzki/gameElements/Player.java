@@ -5,6 +5,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.utils.Array;
 
@@ -53,9 +54,8 @@ public class Player extends Group {
         // Center origin
 //        body.setOrigin(getWidth() / 2f, getHeight() / 2f);
 
-
         setSize(GameConfig.PLAYER_WIDTH, GameConfig.PLAYER_HEIGHT);
-        setPosition(level.offsetX +level.width / 2f - getWidth() / 2f, level.offsetY +level.height);
+        setPosition(level.playerX - getWidth() / 2f, level.playerY);
 
         addActor(body);
 
@@ -157,6 +157,22 @@ public class Player extends Group {
     }
 
     private void handleCollision() { // Check for collision with tiles
+        Vector2 shovelCenter = getShovelCenter();
+        Tile nearTiles[] = grid.getCloseTiles(shovelCenter.x, shovelCenter.y);
+        for (Tile tile: nearTiles) {
+            if (shovel.collidesWith(tile)) {
+                shovel.shovelTile(tile);
+            }
+        }
+    }
+
+    public Vector2 getShovelCenter() {
+        return shovel.localToStageCoordinates(
+            new Vector2(
+                shovel.getX() + shovel.getWidth() / 2f,
+                shovel.getY() + shovel.getHeight() / 2f
+            )
+        );
     }
 
 

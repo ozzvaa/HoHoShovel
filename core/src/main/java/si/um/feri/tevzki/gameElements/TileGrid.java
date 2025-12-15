@@ -58,4 +58,32 @@ public class TileGrid {
             }
         }
     }
+
+    public Tile[] getCloseTiles(float x, float y) {
+        int tileX = (int) x;
+        int tileY = (int) y;
+
+        Tile[] neighbors = new Tile[9];
+        int index = 0;
+
+        for (int dy = -1; dy <= 1; dy++) {
+            for (int dx = -1; dx <= 1; dx++) {
+
+                int nx = tileX + dx;
+                int ny = tileY + dy;
+
+                // bounds check
+                if (ny >= 0 && ny < grid.length &&
+                    nx >= 0 && nx < grid[0].length) {
+
+                    neighbors[index++] = getTile(nx,ny);
+                }
+            }
+        }
+
+        return neighbors;
+    }
+    public Tile getTile(float x, float y) {
+        return grid[(int)y][(int)x];
+    }
 }

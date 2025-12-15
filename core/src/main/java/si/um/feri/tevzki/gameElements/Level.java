@@ -11,6 +11,8 @@ public class Level {
     public Rectangle rect;
     public TileType[][] levelGrid;
     private TextureAtlas gameAtlas;
+    public float playerX;
+    public float playerY;
 
     public Level(int offsetX, int offsetY, int width, int height, TextureAtlas gameAtlas) {
         this.offsetX = offsetX;
@@ -18,11 +20,14 @@ public class Level {
         this.width = width;
         this.height = height;
         this.gameAtlas = gameAtlas;
-        rect = new Rectangle(offsetX, offsetY, width, height);
+        this.playerX = offsetX + width/2;
+        this.playerY = offsetY + height/2;
+        this.rect = new Rectangle(offsetX, offsetY, width, height);
+        this.levelGrid = new TileType[this.height][this.width];
+
     }
 
     public static Level level1(TextureAtlas gameAtlas) {
-        Level level1 = new Level(17, 8, 12, 13, gameAtlas);
         int [][] tileNumberMap = new int[][]{
             {1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,},
             {1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,},
@@ -40,9 +45,9 @@ public class Level {
             {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0,},
             {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0,},
         };
-        level1.height = tileNumberMap.length;
-        level1.width = tileNumberMap[0].length;
-
+        Level level1 = new Level(17, 8, tileNumberMap.length, tileNumberMap[0].length, gameAtlas);
+        level1.playerX = level1.offsetX + 1f;
+        level1.playerY = level1.offsetY + level1.height;
         level1.levelGrid = new TileType[level1.height][level1.width];
 
         for (int mapY = 0; mapY < level1.height; mapY++) {

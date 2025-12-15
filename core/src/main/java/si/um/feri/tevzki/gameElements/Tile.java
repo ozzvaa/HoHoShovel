@@ -38,10 +38,12 @@ public class Tile extends Entity {
         } else {
             region = null;
         }
-
-
-
     }
+
+    public void setType(int typeId) {
+        setType(TileType.fromId(typeId));
+    }
+
 
 
 }
