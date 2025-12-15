@@ -56,17 +56,19 @@ public class SnowTile extends Group {
 
     }
 
-    public void shovelTile(Shovel shovel){
+    public int shovelTile(Shovel shovel){
         Iterator<SnowBit> snowIter = snowBits.iterator();
+        int shoveldBits = 0;
         while (snowIter.hasNext()) {
             SnowBit bit  = snowIter.next();
 
             if (shovel.collidesWith(bit)) {
                 bit.remove();
                 snowIter.remove();
+                shoveldBits++;
             }
         }
-
+        return shoveldBits;
     }
 
 }

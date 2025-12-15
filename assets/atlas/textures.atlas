@@ -1,82 +1,89 @@
 
 textures.png
-size: 256, 256
+size: 1024, 1024
 format: RGBA8888
 filter: Nearest, Nearest
 repeat: none
 background_tile
   rotate: false
-  xy: 2, 120
+  xy: 2, 190
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
 grass_tile
   rotate: false
-  xy: 2, 54
+  xy: 829, 812
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
+hisa_background
+  rotate: false
+  xy: 2, 320
+  size: 748, 556
+  orig: 748, 556
+  offset: 0, 0
+  index: -1
 husband
   rotate: false
-  xy: 2, 28
-  size: 15, 24
-  orig: 15, 24
+  xy: 752, 756
+  size: 75, 120
+  orig: 75, 120
   offset: 0, 0
   index: -1
 husband_left
   rotate: false
-  xy: 198, 224
-  size: 15, 24
-  orig: 15, 24
+  xy: 2, 68
+  size: 75, 120
+  orig: 75, 120
   offset: 0, 0
   index: -1
 husband_right
   rotate: false
-  xy: 132, 158
-  size: 15, 24
-  orig: 15, 24
+  xy: 132, 198
+  size: 75, 120
+  orig: 75, 120
   offset: 0, 0
   index: -1
 husband_top
   rotate: false
-  xy: 2, 2
-  size: 15, 24
-  orig: 15, 24
+  xy: 752, 634
+  size: 75, 120
+  orig: 75, 120
   offset: 0, 0
   index: -1
 road_tile
   rotate: false
-  xy: 132, 184
+  xy: 2, 2
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 shovel
   rotate: false
-  xy: 19, 39
-  size: 7, 13
-  orig: 7, 13
+  xy: 79, 123
+  size: 35, 65
+  orig: 35, 65
   offset: 0, 0
   index: -1
 shovel_left
   rotate: false
-  xy: 198, 209
-  size: 7, 13
-  orig: 7, 13
+  xy: 752, 567
+  size: 35, 65
+  orig: 35, 65
   offset: 0, 0
   index: -1
 shovel_right
   rotate: false
-  xy: 215, 235
-  size: 7, 13
-  orig: 7, 13
+  xy: 829, 745
+  size: 34, 65
+  orig: 34, 65
   offset: 0, 0
   index: -1
 snow_tile
   rotate: false
-  xy: 68, 54
+  xy: 209, 254
   size: 64, 64
   orig: 64, 64
   offset: 0, 0

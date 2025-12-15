@@ -13,7 +13,6 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -51,7 +50,7 @@ public class GameScreen extends ScreenAdapter {
     private static final float ZOOM_MIN = 0.5f;
     private static final float ZOOM_MAX = 2.5f;
     private static final boolean debug = false;
-    private Rectangle cameraRegion;
+    private Rectangle worldBorder;
 
     public GameScreen(ShovelGame game) {
         this.game = game;
@@ -66,7 +65,7 @@ public class GameScreen extends ScreenAdapter {
 
         // Game stage
         levelCamera = new OrthographicCamera();
-        cameraRegion = new Rectangle(0,0,GameConfig.WORLD_WIDTH, GameConfig.WORLD_HEIGHT);
+        worldBorder = new Rectangle(0,0,GameConfig.WORLD_WIDTH, GameConfig.WORLD_HEIGHT);
         levelViewport = new FitViewport(GameConfig.WORLD_WIDTH, GameConfig.WORLD_HEIGHT, levelCamera);
         levelStage = new Stage(levelViewport, game.getBatch());
         levelStage.setDebugAll(debug);
@@ -180,10 +179,10 @@ public class GameScreen extends ScreenAdapter {
 
         shapeRenderer.setColor(Color.YELLOW);
         shapeRenderer.rect(
-            cameraRegion.x,
-            cameraRegion.y,
-            cameraRegion.width,
-            cameraRegion.height
+            worldBorder.x,
+            worldBorder.y,
+            worldBorder.width,
+            worldBorder.height
         );
         System.out.println(levelCamera.viewportHeight*levelCamera.zoom);
 

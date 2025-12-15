@@ -30,6 +30,7 @@ public class Player extends Group {
     private static TextureRegion shovelUpRegion;
     private static TextureRegion shovelLeftRegion;
     private static TextureRegion shovelRightRegion;
+    private Array<Snowball> snowballs;
 
 
     public Player(TextureAtlas atlas, Array<SnowTile> tileGrid, TextureRegion shovelRegion) {
@@ -130,6 +131,17 @@ public class Player extends Group {
             }
         }
 
+        float newX = getX()+dx;
+        float newY = getY()+dy;
+
+        // World bounds
+        if (newX < 0 || newX + getWidth() >  GameConfig.WORLD_WIDTH){
+            return;
+        }
+        if  (newY < 0 || newY + getHeight() >  GameConfig.WORLD_HEIGHT){
+            return;
+        }
+
         moveBy(dx, dy);
     }
 
@@ -153,11 +165,17 @@ public class Player extends Group {
         while (iter.hasNext()) {
             SnowTile snowTile = iter.next();
             if (shovel.collidesWith(snowTile.baseTile)) {
-                snowTile.shovelTile(shovel);
+                int snowballCount = snowTile.shovelTile(shovel);
+                stackSnowballs(snowballCount);
             }
         }
     }
 
+    private void stackSnowballs(int snowballCount) {
+        for (int i = 0; i < snowballCount; i++) {
+
+        }
+    }
 
 
 }
