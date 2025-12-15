@@ -9,8 +9,7 @@ public class GameConfig {
     public static final float TILE_SIZE = 1; // 64
     public static final float WORLD_WIDTH = TILE_SIZE*50;
     public static final float WORLD_HEIGHT = WORLD_WIDTH/SCREEN_ASPECT;
-    public static final int GRID_WIDTH = 3; // number of tiles in a grid
-    public static final int GRID_HEIGHT = 3; // number of tiles in a grid
+    public static final boolean DEBUG = true;
     public static float PLAYER_WIDTH;
     public static final float PLAYER_HEIGHT = TILE_SIZE*2;
     public static final float PLAYER_SPEED = TILE_SIZE*4;

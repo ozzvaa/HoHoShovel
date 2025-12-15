@@ -46,4 +46,16 @@ public class TileGrid {
             }
         }
     }
+
+    public void setTiles(TileType tileType, Level level) {
+        setTiles(tileType, level.offsetX, level.offsetY, level.width, level.height);
+    }
+
+    public void setLevel(Level level) {
+        for (int y = 0; y < level.height; y++) {
+            for (int x = 0; x < level.width; x++) {
+                grid[y+level.offsetY][x+level.offsetX].setType(level.getTileType(x,y));
+            }
+        }
+    }
 }

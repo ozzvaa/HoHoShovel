@@ -27,10 +27,10 @@ import si.um.feri.tevzki.ShovelGame;
 import si.um.feri.tevzki.assets.AssetDescriptors;
 import si.um.feri.tevzki.assets.RegionNames;
 import si.um.feri.tevzki.config.GameConfig;
+import si.um.feri.tevzki.gameElements.Level;
 import si.um.feri.tevzki.gameElements.Tile;
 import si.um.feri.tevzki.gameElements.TileGrid;
 import si.um.feri.tevzki.gameElements.Player;
-import si.um.feri.tevzki.gameElements.TileType;
 
 /** First screen of the application.
  * Loads Assets and prepares systems. Is the Screen that creates the engine
@@ -51,8 +51,10 @@ public class GameScreen extends ScreenAdapter {
     private float zoom = 1f;
     private static final float ZOOM_MIN = 0.5f;
     private static final float ZOOM_MAX = 2.5f;
-    private static final boolean debug = false;
+    private static final boolean debug = GameConfig.DEBUG;
     private Rectangle worldBorder;
+    private Level level;
+
 
     public GameScreen(ShovelGame game) {
         this.game = game;
@@ -92,9 +94,13 @@ public class GameScreen extends ScreenAdapter {
                 levelStage.addActor(tile);
             }
         }
-        tileGrid.setTiles(TileType.SNOW, 17, 9, 12, 13);
 
-        player = new Player(gameAtlas, tileGrid, gameAtlas.findRegion(RegionNames.SHOVEL));
+        // Setup playable area
+        level = Level.level1(gameAtlas);
+        tileGrid.setLevel(level);
+//        tileGrid.setTiles(TileType.SNOW, level1);
+
+        player = new Player(gameAtlas, tileGrid, level, gameAtlas.findRegion(RegionNames.SHOVEL));
         levelStage.addActor(player);
         setupInputHandlers();
     }
@@ -205,6 +211,14 @@ public class GameScreen extends ScreenAdapter {
             worldBorder.y,
             worldBorder.width,
             worldBorder.height
+        );
+
+        shapeRenderer.setColor(Color.GOLD);
+        shapeRenderer.rect(
+            level.offsetX,
+            level.offsetY,
+            level.width,
+            level.height
         );
 
         shapeRenderer.end();

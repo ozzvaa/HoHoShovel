@@ -4,61 +4,58 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.utils.Array;
-
-import java.util.Iterator;
 
 import si.um.feri.tevzki.assets.RegionNames;
 import si.um.feri.tevzki.config.GameConfig;
 
 public class Player extends Group {
-    private Entity body;
-    public Shovel shovel;
-    private TileGrid grid;
-
-
-    private Array<Direction> dirStack = new Array<Direction>();
     private static final int STACK_SIZE = 4;
-
     private static TextureRegion downRegion;
     private static TextureRegion upRegion;
     private static TextureRegion leftRegion;
     private static TextureRegion rightRegion;
-
     private static TextureRegion shovelDownRegion;
     private static TextureRegion shovelUpRegion;
     private static TextureRegion shovelLeftRegion;
     private static TextureRegion shovelRightRegion;
+    public Shovel shovel;
+    private Entity body;
+    private TileGrid grid;
+    private Array<Direction> dirStack = new Array<Direction>();
     private Array<Snowball> snowballs;
+    private Level level;
 
 
-    public Player(TextureAtlas atlas, TileGrid tileGrid, TextureRegion shovelRegion) {
+    public Player(TextureAtlas atlas, TileGrid tileGrid, Level level, TextureRegion shovelRegion) {
+        this.level = level;
         body = new Entity();
 
-        downRegion  = atlas.findRegion(RegionNames.HUSBAND_DOWN);
-        leftRegion  = atlas.findRegion(RegionNames.HUSBAND_LEFT);
+        downRegion = atlas.findRegion(RegionNames.HUSBAND_DOWN);
+        leftRegion = atlas.findRegion(RegionNames.HUSBAND_LEFT);
         rightRegion = atlas.findRegion(RegionNames.HUSBAND_RIGHT);
         upRegion = atlas.findRegion(RegionNames.HUSBAND_TOP);
 
-        shovelDownRegion  = atlas.findRegion(RegionNames.SHOVEL);
-        shovelLeftRegion  = atlas.findRegion(RegionNames.SHOVEL_LEFT);
+        shovelDownRegion = atlas.findRegion(RegionNames.SHOVEL);
+        shovelLeftRegion = atlas.findRegion(RegionNames.SHOVEL_LEFT);
         shovelRightRegion = atlas.findRegion(RegionNames.SHOVEL_RIGHT);
         shovelUpRegion = atlas.findRegion(RegionNames.SHOVEL);
 
         body.region = downRegion;
 
-        float aspectRatio =(float) body.region.getRegionWidth() / body.region.getRegionHeight();
-        GameConfig.PLAYER_WIDTH = GameConfig.PLAYER_HEIGHT*aspectRatio;
+        float aspectRatio = (float) body.region.getRegionWidth() / body.region.getRegionHeight();
+        GameConfig.PLAYER_WIDTH = GameConfig.PLAYER_HEIGHT * aspectRatio;
 
         body.setSize(GameConfig.PLAYER_WIDTH, GameConfig.PLAYER_HEIGHT);
 
         // Center origin
-        body.setOrigin(getWidth() / 2f, getHeight() / 2f);
+//        body.setOrigin(getWidth() / 2f, getHeight() / 2f);
 
 
-        setPosition(GameConfig.WORLD_WIDTH/2f-getWidth()/2f, GameConfig.WORLD_HEIGHT/2f-getHeight()/2f);
         setSize(GameConfig.PLAYER_WIDTH, GameConfig.PLAYER_HEIGHT);
+        setPosition(level.offsetX +level.width / 2f - getWidth() / 2f, level.offsetY +level.height);
 
         addActor(body);
 
@@ -117,28 +114,28 @@ public class Player extends Group {
                 case UP:
                     dy = speed;
                     body.region = upRegion;
-                    shovel.moveTo(getWidth()/2-shovel.getWidth()/2, 0);
+                    shovel.moveTo(getWidth() / 2 - shovel.getWidth() / 2, 0);
                     shovel.setZIndex(0);
                     shovel.region = shovelUpRegion;
                     break;
                 case DOWN:
                     dy = -speed;
                     body.region = downRegion;
-                    shovel.moveTo(getWidth()/2-shovel.getWidth()/2, 0);
+                    shovel.moveTo(getWidth() / 2 - shovel.getWidth() / 2, 0);
                     shovel.setZIndex(1);
                     shovel.region = shovelDownRegion;
                     break;
             }
         }
 
-        float newX = getX()+dx;
-        float newY = getY()+dy;
+        float newX = getX() + dx;
+        float newY = getY() + dy;
 
         // World bounds
-        if (newX < 0 || newX + getWidth() >  GameConfig.WORLD_WIDTH){
+        if (newX < level.offsetX || newX + getWidth() > level.offsetX + level.width) {
             return;
         }
-        if  (newY < 0 || newY + getHeight() >  GameConfig.WORLD_HEIGHT){
+        if (newY < level.offsetY || newY > level.offsetY + level.height) {
             return;
         }
 
@@ -160,12 +157,6 @@ public class Player extends Group {
     }
 
     private void handleCollision() { // Check for collision with tiles
-    }
-
-    private void stackSnowballs(int snowballCount) {
-        for (int i = 0; i < snowballCount; i++) {
-
-        }
     }
 
 
