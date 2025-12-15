@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 import si.um.feri.tevzki.screen.GameScreen;
+import si.um.feri.tevzki.screen.IntroScreen;
 
 /**
  * {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms.
@@ -24,7 +25,7 @@ public class ShovelGame extends Game {
         batch = new SpriteBatch();
         shapeRenderer = new ShapeRenderer();
 
-        setScreen(new GameScreen(this));
+        setScreen(new IntroScreen(this));
     }
 
     @Override

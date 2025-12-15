@@ -74,9 +74,6 @@ public class GameScreen extends ScreenAdapter {
         levelStage = new Stage(levelViewport, game.getBatch());
         levelStage.setDebugAll(debug);
 
-        // Asset manager
-        assetManager.load(AssetDescriptors.GAME_ATLAS);
-        assetManager.finishLoading();
 
         gameAtlas = assetManager.get(AssetDescriptors.GAME_ATLAS);
 

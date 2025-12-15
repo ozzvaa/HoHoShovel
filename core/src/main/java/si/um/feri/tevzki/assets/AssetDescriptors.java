@@ -13,6 +13,9 @@ public class AssetDescriptors {
     public static final AssetDescriptor<TextureAtlas> GAME_ATLAS =
         new AssetDescriptor<TextureAtlas>(AssetPaths.GAME_ATLAS, TextureAtlas.class);
 
+    public static final AssetDescriptor<Sound> INTRO_SOUND =
+        new AssetDescriptor<Sound>(AssetPaths.INTRO_SOUND, Sound.class);
+
     private AssetDescriptors() {
     }
 }
