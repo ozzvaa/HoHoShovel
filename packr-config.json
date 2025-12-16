@@ -1,0 +1,11 @@
+{
+  "platform": "windows64",
+  "jdk": "C:\\Program Files\\Java\\jdk-23",
+  "executable": "HoHoShovel",
+  "classpath": ["lwjgl3/build/libs/HoHoShovel-1.0.0.jar"],
+  "mainclass": "si.um.feri.tevzki.lwjgl3.ShovelGameLauncher",
+  "vmArgs": ["-Xmx1024m"],
+  "resources": ["assets/"],
+  "output": "packr-output",
+  "minimizeJre": "soft"
+}
