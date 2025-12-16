@@ -78,6 +78,13 @@ To pa za našega ubogega prijatelčka pomeni zgodnje vstajanje in potenje ob opr
 - Posebna zahvala gre tudi Zarji Ozvatič (aka. Malapuncka123), ki je ustvarila logotip igre
 
 
+---
 
+### 9. Inštalacija igre
+`git clone <repo>`
+
+Odpri repo v Android studiu in poženi
+
+`HoHoShovel\lwjgl3\src\main\java\si\um\feri\tevzki\lwjgl3\ShovelGameLauncher.java`
 
 
